@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 
 import { Link } from 'react-router-dom'
 
@@ -7,6 +7,8 @@ import Button from '../Form/Button'
 
 import { TOKEN_POST, USER_GET } from '../../api'
 
+import { UserContext } from '../../contexts/UserContext'
+
 import useForm from '../../hooks/useForm'
 
 const LoginForm = () => {
@@ -14,33 +16,13 @@ const LoginForm = () => {
     const username = useForm()
     const password = useForm()
 
-    useEffect(() => {
-       const token = localStorage.getItem('token')
-       if(token){
-           getUser(token)
-       }
-    }, [])
-
-    const getUser = async (token) => {
-        const { url, options } = USER_GET(token)
-        const response = await fetch(url, options)
-        const json = await response.json()
-        console.log(json)
-    }
+    const { userLogin } = useContext(UserContext)
 
     const handleSubmit =  async (e) => {
        e.preventDefault()
 
        if(username.validate() && password.validate()){
-           const { url, options } = TOKEN_POST({
-               username: username.value,
-               password: password.value
-           })
-
-           const response = await fetch(url, options)
-           const json = await response.json()
-           localStorage.setItem('token', json.token)
-           getUser(json.token)
+           userLogin(username.value, password.value)
        }
     
     }
