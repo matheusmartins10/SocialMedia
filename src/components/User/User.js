@@ -1,10 +1,13 @@
 import React from 'react'
+import { UserContext } from '../../contexts/UserContext'
+
+import UserHeader from './UserHeader'
 
 const User = () => {
     return (
-        <div>
-            usuario
-        </div>
+        <section className="container">
+            <UserHeader />
+        </section>
     )
 }
 
